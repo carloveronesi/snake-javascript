@@ -161,7 +161,7 @@ function message(testo){
 	clearInterval(GameArea.interval);																		//Blocco aggiornamento frame
 	GameArea.clear();																						//Pulisco schermo
 	ctx.fillStyle = MESSAGECOLOR;
-	ctx.FONT= MESSAGEFONTDIM +"px " + FONT;
+	ctx.font= MESSAGEFONTDIM +"px " + FONT;
 	var textWidth = ctx.measureText(testo).width;  															//Ottengo la lunghezza del testo per la stampa
 	ctx.fillText(testo, (CANVASWIDTH/2)-(textWidth/2), (CANVASHEIGHT/2)+(MESSAGEFONTDIM/2));				//Stampo
 }
@@ -177,7 +177,7 @@ function Score() {
 	}
 	this.print = function(){																				//Stampo il punteggio
 		ctx.fillStyle = MESSAGECOLOR;
-		ctx.FONT = SCOREFONTDIM + "px " + FONT;   
+		ctx.font = SCOREFONTDIM + "px " + FONT;   
 		ctx.fillText("Score: " + this.points, 10, 10);
 	}
 }
