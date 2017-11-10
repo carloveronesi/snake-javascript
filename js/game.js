@@ -1,16 +1,18 @@
 var Apple, Snake, Score;
 
+
+
 function startGame() {																						//INIZIALIZZO il gioco
 	Apple = new Apple(19, "red");																			//Apple(dimensione, colore)
 	Apple.newPos();
 	Snake = new Snake(19, "green", 3);																		//Snake(dimensione, colore, lunghezza iniziale)
 	Snake.init();
 	Score = new Score(3);																					//Score(punteggio-massimo)
-    gameArea.start();																						//Avvio il gioco							
+    GameArea.start();																						//Avvio il gioco							
 }
 
 //Genero area di gioco
-var gameArea = {
+var GameArea = {
 	canvas : document.createElement("canvas"),
 	start : function() {
         this.canvas.width = 360;																			//Setto lunghezza area gioco
@@ -27,7 +29,7 @@ var gameArea = {
 
 //Stampo quadrato
 function printSquare(x, y, width, color) {
-	ctx = gameArea.context;
+	ctx = GameArea.context;
 	ctx.beginPath();																						//INIZIO FORMA
 	ctx.rect(x*width, y*width, width, width);																//Stampo il rettangolo moltiplicando posizione per dimensione rettangolo
 	ctx.fillStyle = color;																					//Colore riempimento
@@ -66,12 +68,12 @@ function Snake(width, color, initLength){
 		SnakeX += this.direction.x;																			//Sposto in base alla direzione
 		SnakeY += this.direction.y;
 
-		melaMangiata(SnakeX, SnakeY);																		//Controllo se la mela è mangiata
+		eatApple(SnakeX, SnakeY);																		//Controllo se la mela è mangiata
 
 		//Eseguo controllo (uscita dall'area consentita o collisione con il corpo)
-		if(SnakeX == gameArea.canvas.width/(Snake.width+1)+1 || SnakeX == -1 || SnakeY == gameArea.canvas.height/(Snake.width+1)+1 || SnakeY == -1 ){
+		if(SnakeX == GameArea.canvas.width/(Snake.width+1)+1 || SnakeX == -1 || SnakeY == GameArea.canvas.height/(Snake.width+1)+1 || SnakeY == -1 ){
 			over = true;		
-			messaggio("GAME OVER")	;																		//GAME OVER
+			message("GAME OVER")	;																		//GAME OVER
 		}else{
 			tail.x = SnakeX; 																				//Ok, setto la nuova posizione
 			tail.y = SnakeY;
@@ -121,13 +123,13 @@ function Apple(width, color) {
 		printSquare(this.x, this.y, width, this.color);
 	}
     this.newPos = function() {																				//Cambio posizione
-		this.x = Math.floor(Math.random()*(gameArea.canvas.width/(width+1)));
-		this.y = Math.floor(Math.random()*(gameArea.canvas.width/(width+1)));     
+		this.x = Math.floor(Math.random()*(GameArea.canvas.width/(width+1)));
+		this.y = Math.floor(Math.random()*(GameArea.canvas.width/(width+1)));     
 	}    
 }
 
 //Controllo se la mela e' stata mangiata
-function melaMangiata(x, y){
+function eatApple(x, y){
 	if(x == Apple.x && y == Apple.y){																		//Mangiata
 		Score.add();																						//Aumento punteggio
 		Apple.newPos();																						//Genero nuova mela
@@ -139,14 +141,14 @@ function melaMangiata(x, y){
 }
 
 //Game over
-function messaggio(testo){
-	clearInterval(gameArea.interval);																		//Blocco aggiornamento frame
-	gameArea.clear();																						//Pulisco schermo
+function message(testo){
+	clearInterval(GameArea.interval);																		//Blocco aggiornamento frame
+	GameArea.clear();																						//Pulisco schermo
 	var fontSize = "30";
 	ctx.fillStyle = 'blue';
 	ctx.font= fontSize +"px " + "Georgia";
 	var textWidth = ctx.measureText(testo).width;  															//Ottengo la lunghezza del testo per la stampa
-	ctx.fillText(testo, (gameArea.canvas.width/2)-(textWidth/2), (gameArea.canvas.height/2)+(fontSize/2));	//Stampo
+	ctx.fillText(testo, (GameArea.canvas.width/2)-(textWidth/2), (GameArea.canvas.height/2)+(fontSize/2));	//Stampo
 }
 
 //Gestione punteggio
@@ -156,7 +158,7 @@ function Score(max) {
 	this.add = function() {																					//Aumento il punteggio
 		this.points++;
 		if(this.points == this.max)	
-			messaggio("VITTORIA");
+			message("VITTORIA");
 	}
 	this.print = function(){																				//Stampo il punteggio
 		ctx.fillStyle = 'blue';
@@ -167,7 +169,7 @@ function Score(max) {
 
 //Disegno tutto
 function updateGameArea() {
-	gameArea.clear();
+	GameArea.clear();
 
 	Snake.move();																						//Faccio muovere lo Snake																					//Pulisco schermo
 	Apple.update();																						//Stampo mela
