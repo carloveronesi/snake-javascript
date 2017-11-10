@@ -1,12 +1,12 @@
 var apple, snake, score;
 
-function startGame() {
-	apple = new apple(19, "red");
+function startGame() {																						//INIZIALIZZO il gioco
+	apple = new apple(19, "red");																			//apple(dimensione, colore)
 	apple.newPos();
-	snake = new snake(19, "green", 3);
+	snake = new snake(19, "green", 3);																		//snake(dimensione, colore, lunghezza iniziale)
 	snake.init();
-	score = new score(3);
-    gameArea.start();
+	score = new score(3);																					//Score(punteggio-massimo)
+    gameArea.start();																						//Avvio il gioco							
 }
 
 //Genero area di gioco
