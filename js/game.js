@@ -1,13 +1,21 @@
 var Apple, Snake, Score;
-
-
+//COSTANTI VARIE
+const canvasWidth = 360;
+const canvasHeight = 360;
+const appleColor = "red";
+const snakeColor = "green";
+const strokeColor = "black";
+const squareDim = 19;
+const snakeInitLen = 3;
+const maxScore = 3;
+const updateInterval = 200;
 
 function startGame() {																						//INIZIALIZZO il gioco
-	Apple = new Apple(19, "red");																			//Apple(dimensione, colore)
+	Apple = new Apple();																					//Apple(dimensione, colore)
 	Apple.newPos();
-	Snake = new Snake(19, "green", 3);																		//Snake(dimensione, colore, lunghezza iniziale)
+	Snake = new Snake();																					//Snake(dimensione, colore, lunghezza iniziale)
 	Snake.init();
-	Score = new Score(3);																					//Score(punteggio-massimo)
+	Score = new Score();																					//Score(punteggio-massimo)
     GameArea.start();																						//Avvio il gioco							
 }
 
@@ -15,12 +23,12 @@ function startGame() {																						//INIZIALIZZO il gioco
 var GameArea = {
 	canvas : document.createElement("canvas"),
 	start : function() {
-        this.canvas.width = 360;																			//Setto lunghezza area gioco
-		this.canvas.height = 360;																			//Setto altezza area gioco
+        this.canvas.width = canvasWidth;																	//Setto lunghezza area gioco
+		this.canvas.height = canvasHeight;																	//Setto altezza area gioco
 		this.context = this.canvas.getContext("2d");
 		document.body.insertBefore(this.canvas, document.body.childNodes[0]);								//Inserisco prima dei comandi
 		
-        this.interval = setInterval(updateGameArea, 200);													//Setto intervallo aggiornamento (in ms)
+        this.interval = setInterval(updateGameArea, updateInterval);										//Setto intervallo aggiornamento (in ms)
 	},
 	clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);								//Pulisco
@@ -34,17 +42,17 @@ function printSquare(x, y, width, color) {
 	ctx.rect(x*width, y*width, width, width);																//Stampo il rettangolo moltiplicando posizione per dimensione rettangolo
 	ctx.fillStyle = color;																					//Colore riempimento
 	ctx.fill();
-	ctx.strokeStyle = "black";																				//Colore Contorno
+	ctx.strokeStyle = strokeColor;																				//Colore Contorno
 	ctx.stroke();	
 	ctx.closePath();																						//FINE FORMA
 }
 
 //Snake
-function Snake(width, color, initLength){
+function Snake(){
 	//Settaggi vari
-	this.width = width;
-	this.color = color;
-	this.initLength = initLength;
+	this.width = squareDim;
+	this.color = snakeColor;
+	this.initLength = snakeInitLen;
 	this.body = [];																							//Vettore contenente le posizioni dei rettangoli
 	this.direction = {x: 1, y:0};																			//Setto la direzione iniziale
 
@@ -56,7 +64,7 @@ function Snake(width, color, initLength){
 	}
 	this.update = function() {																				//Stampo lo Snake
 		for(i = 0; i < this.body.length; i++){
-			printSquare(this.body[i].x, this.body[i].y, width, this.color);
+			printSquare(this.body[i].x, this.body[i].y, this.width, this.color);
 		}
 	}
 	this.move = function(){																					//Movimento dello Snake
@@ -71,7 +79,7 @@ function Snake(width, color, initLength){
 		eatApple(SnakeX, SnakeY);																		//Controllo se la mela è mangiata
 
 		//Eseguo controllo (uscita dall'area consentita o collisione con il corpo)
-		if(SnakeX == GameArea.canvas.width/(Snake.width+1)+1 || SnakeX == -1 || SnakeY == GameArea.canvas.height/(Snake.width+1)+1 || SnakeY == -1 ){
+		if(SnakeX == canvasWidth/(Snake.width+1)+1 || SnakeX == -1 || SnakeY == canvasHeight/(Snake.width+1)+1 || SnakeY == -1 ){
 			over = true;		
 			message("GAME OVER")	;																		//GAME OVER
 		}else{
@@ -113,18 +121,18 @@ function sposta(direzione){
 }
 
 //Mela
-function Apple(width, color) {
+function Apple() {
 	//impostazioni varie
-    this.width = width;
-	this.color = color;
+    this.width = squareDim;
+	this.color = appleColor;
     this.x;
     this.y;    
     this.update = function() {																				//Stampo la mela
-		printSquare(this.x, this.y, width, this.color);
+		printSquare(this.x, this.y, this.width, this.color);
 	}
     this.newPos = function() {																				//Cambio posizione
-		this.x = Math.floor(Math.random()*(GameArea.canvas.width/(width+1)));
-		this.y = Math.floor(Math.random()*(GameArea.canvas.width/(width+1)));     
+		this.x = Math.floor(Math.random()*(canvasWidth/(this.width+1)));
+		this.y = Math.floor(Math.random()*(canvasWidth/(this.width+1)));     
 	}    
 }
 
@@ -148,13 +156,13 @@ function message(testo){
 	ctx.fillStyle = 'blue';
 	ctx.font= fontSize +"px " + "Georgia";
 	var textWidth = ctx.measureText(testo).width;  															//Ottengo la lunghezza del testo per la stampa
-	ctx.fillText(testo, (GameArea.canvas.width/2)-(textWidth/2), (GameArea.canvas.height/2)+(fontSize/2));	//Stampo
+	ctx.fillText(testo, (canvasWidth/2)-(textWidth/2), (canvasHeight/2)+(fontSize/2));	//Stampo
 }
 
 //Gestione punteggio
-function Score(max) {
+function Score() {
 	this.points = 0;
-	this.max = max;
+	this.max = maxScore;
 	this.add = function() {																					//Aumento il punteggio
 		this.points++;
 		if(this.points == this.max)	
