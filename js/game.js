@@ -1,6 +1,4 @@
-var Apple, Snake, Score;
-
-//COSTANTI VARIE
+//SETTINGS
 const canvasWidth = 360;
 const canvasHeight = 360;
 const appleColor = "red";
@@ -16,14 +14,17 @@ const messageFontDim = 30;
 const font = "Georgia";
 const messageColor = "blue";
 const scoreFontDim = 15;
+const snakeDirection = {x: 1, y:0};
+
+var Apple, Snake, Score;
 
 function startGame() {																						//INIZIALIZZO il gioco
-	Apple = new Apple();																					//Apple(dimensione, colore)
+	Apple = new Apple();																					
 	Apple.newPos();
-	Snake = new Snake();																					//Snake(dimensione, colore, lunghezza iniziale)
+	Snake = new Snake();																					
 	Snake.init();
-	Score = new Score();																					//Score(punteggio-massimo)
-    GameArea.start();																						//Avvio il gioco							
+	Score = new Score();																					
+    GameArea.start();																													
 }
 
 //Genero area di gioco
@@ -49,7 +50,7 @@ function printSquare(x, y, width, color) {
 	ctx.rect(x*width, y*width, width, width);																//Stampo il rettangolo moltiplicando posizione per dimensione rettangolo
 	ctx.fillStyle = color;																					//Colore riempimento
 	ctx.fill();
-	ctx.strokeStyle = strokeColor;																				//Colore Contorno
+	ctx.strokeStyle = strokeColor;																			//Colore Contorno
 	ctx.stroke();	
 	ctx.closePath();																						//FINE FORMA
 }
@@ -61,7 +62,7 @@ function Snake(){
 	this.color = snakeColor;
 	this.initLength = snakeInitLen;
 	this.body = [];																							//Vettore contenente le posizioni dei rettangoli
-	this.direction = {x: 1, y:0};																			//Setto la direzione iniziale
+	this.direction = snakeDirection;																		//Setto la direzione iniziale
 
 
 	this.init = function(){																					//Inizializzo il vettore posizionando in alto a sx
@@ -162,7 +163,7 @@ function message(testo){
 	ctx.fillStyle = messageColor;
 	ctx.font= messageFontDim +"px " + font;
 	var textWidth = ctx.measureText(testo).width;  															//Ottengo la lunghezza del testo per la stampa
-	ctx.fillText(testo, (canvasWidth/2)-(textWidth/2), (canvasHeight/2)+(messageFontDim/2));	//Stampo
+	ctx.fillText(testo, (canvasWidth/2)-(textWidth/2), (canvasHeight/2)+(messageFontDim/2));				//Stampo
 }
 
 //Gestione punteggio
