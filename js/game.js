@@ -1,11 +1,11 @@
-var apple, snake, score;
+var Apple, Snake, Score;
 
 function startGame() {																						//INIZIALIZZO il gioco
-	apple = new apple(19, "red");																			//apple(dimensione, colore)
-	apple.newPos();
-	snake = new snake(19, "green", 3);																		//snake(dimensione, colore, lunghezza iniziale)
-	snake.init();
-	score = new score(3);																					//Score(punteggio-massimo)
+	Apple = new Apple(19, "red");																			//Apple(dimensione, colore)
+	Apple.newPos();
+	Snake = new Snake(19, "green", 3);																		//Snake(dimensione, colore, lunghezza iniziale)
+	Snake.init();
+	Score = new Score(3);																					//Score(punteggio-massimo)
     gameArea.start();																						//Avvio il gioco							
 }
 
@@ -38,7 +38,7 @@ function printSquare(x, y, width, color) {
 }
 
 //Snake
-function snake(width, color, initLength){
+function Snake(width, color, initLength){
 	//Settaggi vari
 	this.width = width;
 	this.color = color;
@@ -52,29 +52,29 @@ function snake(width, color, initLength){
 			this.body.push({x:i, y:0});																		//Inserisco tramite push
 		}
 	}
-	this.update = function() {																				//Stampo lo snake
+	this.update = function() {																				//Stampo lo Snake
 		for(i = 0; i < this.body.length; i++){
 			printSquare(this.body[i].x, this.body[i].y, width, this.color);
 		}
 	}
-	this.move = function(){																					//Movimento dello snake
-		var snakeX = this.body[0].x;																		//Variabili temporanee di posizione
-		var snakeY = this.body[0].y;
+	this.move = function(){																					//Movimento dello Snake
+		var SnakeX = this.body[0].x;																		//Variabili temporanee di posizione
+		var SnakeY = this.body[0].y;
 
 		var tail = this.body.pop(); 																		//Rimuovo tramite pop l'ultima cella
 
-		snakeX += this.direction.x;																			//Sposto in base alla direzione
-		snakeY += this.direction.y;
+		SnakeX += this.direction.x;																			//Sposto in base alla direzione
+		SnakeY += this.direction.y;
 
-		melaMangiata(snakeX, snakeY);																		//Controllo se la mela è mangiata
+		melaMangiata(SnakeX, SnakeY);																		//Controllo se la mela è mangiata
 
 		//Eseguo controllo (uscita dall'area consentita o collisione con il corpo)
-		if(snakeX == gameArea.canvas.width/(snake.width+1)+1 || snakeX == -1 || snakeY == gameArea.canvas.height/(snake.width+1)+1 || snakeY == -1 ){
+		if(SnakeX == gameArea.canvas.width/(Snake.width+1)+1 || SnakeX == -1 || SnakeY == gameArea.canvas.height/(Snake.width+1)+1 || SnakeY == -1 ){
 			over = true;		
 			messaggio("GAME OVER")	;																		//GAME OVER
 		}else{
-			tail.x = snakeX; 																				//Ok, setto la nuova posizione
-			tail.y = snakeY;
+			tail.x = SnakeX; 																				//Ok, setto la nuova posizione
+			tail.y = SnakeY;
 		}
 		this.body.unshift(tail);																			//Inserisco la nuova posizione
 	}
@@ -84,34 +84,34 @@ function snake(width, color, initLength){
 function sposta(direzione){
 	switch(direzione){
 		case "right":																						//RIGHT
-			if(snake.direction.x != -1){
-				snake.direction.x = 1;
-				snake.direction.y = 0;
+			if(Snake.direction.x != -1){
+				Snake.direction.x = 1;
+				Snake.direction.y = 0;
 			}
 			break;
 		case "left":																						//LEFT
-			if(snake.direction.x != 1){
-				snake.direction.x = -1;
-				snake.direction.y = 0;
+			if(Snake.direction.x != 1){
+				Snake.direction.x = -1;
+				Snake.direction.y = 0;
 			}
 			break;
 		case "down":																						//DOWN
-			if(snake.direction.y != -1){
-				snake.direction.x = 0;
-				snake.direction.y = 1;
+			if(Snake.direction.y != -1){
+				Snake.direction.x = 0;
+				Snake.direction.y = 1;
 			}
 			break;
 		case "up":																							//UP
-			if(snake.direction.y != 1){
-				snake.direction.x = 0;
-				snake.direction.y = -1;
+			if(Snake.direction.y != 1){
+				Snake.direction.x = 0;
+				Snake.direction.y = -1;
 			}
 			break;
 	}
 }
 
 //Mela
-function apple(width, color) {
+function Apple(width, color) {
 	//impostazioni varie
     this.width = width;
 	this.color = color;
@@ -128,13 +128,13 @@ function apple(width, color) {
 
 //Controllo se la mela e' stata mangiata
 function melaMangiata(x, y){
-	if(x == apple.x && y == apple.y){																		//Mangiata
-		score.add();																						//Aumento punteggio
-		apple.newPos();																						//Genero nuova mela
-		var copia = {x: snake.body[snake.body.length-1].x, y: snake.body[snake.body.length-1].y};			//Copio la coda
-		copia.x-= snake.direction.x;																		//Creo la nuova coda
-		copia.y-= snake.direction.y;
-		snake.body.push(copia);																				//Aggiungo la nuova Coda
+	if(x == Apple.x && y == Apple.y){																		//Mangiata
+		Score.add();																						//Aumento punteggio
+		Apple.newPos();																						//Genero nuova mela
+		var copia = {x: Snake.body[Snake.body.length-1].x, y: Snake.body[Snake.body.length-1].y};			//Copio la coda
+		copia.x-= Snake.direction.x;																		//Creo la nuova coda
+		copia.y-= Snake.direction.y;
+		Snake.body.push(copia);																				//Aggiungo la nuova Coda
 	}
 }
 
@@ -150,7 +150,7 @@ function messaggio(testo){
 }
 
 //Gestione punteggio
-function score(max) {
+function Score(max) {
 	this.points = 0;
 	this.max = max;
 	this.add = function() {																					//Aumento il punteggio
@@ -161,7 +161,7 @@ function score(max) {
 	this.print = function(){																				//Stampo il punteggio
 		ctx.fillStyle = 'blue';
 		ctx.font="15px Georgia";   
-		ctx.fillText("score: " + this.points, 10, 10);
+		ctx.fillText("Score: " + this.points, 10, 10);
 	}
 }
 
@@ -169,8 +169,8 @@ function score(max) {
 function updateGameArea() {
 	gameArea.clear();
 
-	snake.move();																						//Faccio muovere lo snake																					//Pulisco schermo
-	apple.update();																						//Stampo mela
-	snake.update();																						//Stampo snake
-	score.print();																						//Stampo punteggio
+	Snake.move();																						//Faccio muovere lo Snake																					//Pulisco schermo
+	Apple.update();																						//Stampo mela
+	Snake.update();																						//Stampo Snake
+	Score.print();																						//Stampo punteggio
 }
