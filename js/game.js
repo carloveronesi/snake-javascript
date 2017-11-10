@@ -6,7 +6,7 @@ const SNAKECOLOR = "green";
 const STROKECOLOR = "black";
 const SQUAREDIM = 19;
 const SNAKEINITLEN = 3;
-const MAXSCORE = 3;
+const MAXSCORE = 80;
 const UPDATEINTERVAL = 200;
 const GAMEOVERMESSAGE = "GAME OVER";
 const WINMESSAGE = "VITTORIA!";
@@ -87,7 +87,7 @@ function Snake(){
 		eatApple(SnakeX, SnakeY);																			//Controllo se la mela è mangiata
 
 		//Eseguo controllo (uscita dall'area consentita o collisione con il corpo)
-		if(SnakeX == CANVASWIDTH/(Snake.width+1)+1 || SnakeX == -1 || SnakeY == CANVASHEIGHT/(Snake.width+1)+1 || SnakeY == -1 ){
+		if(SnakeX == CANVASWIDTH/(Snake.width+1)+1 || SnakeX == -1 || SnakeY == CANVASHEIGHT/(Snake.width+1)+1 || SnakeY == -1 || cannibal(SnakeX, SnakeY)){
 			over = true;		
 			message(GAMEOVERMESSAGE);																		//GAME OVER
 		}else{
@@ -180,6 +180,14 @@ function Score() {
 		ctx.font = SCOREFONTDIM + "px " + FONT;   
 		ctx.fillText("Score: " + this.points, 10, 10);
 	}
+}
+
+//Controllo se lo snake mangia se stesso
+function cannibal(x, y){
+	for(i = 0; i < Snake.body.length; i++)
+		if(Snake.body[i].x == x && Snake.body[i].y == y)
+			return true;
+	return false;
 }
 
 //Disegno tutto
